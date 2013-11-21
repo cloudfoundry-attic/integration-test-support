@@ -1,7 +1,12 @@
 integration-test-support
 ========================
-Shared code base to run Cloud Foundry integration tests, which involves many CF components.
+Shared code base to help you write Cloud Foundry integration tests, which involves many CF components.
 
+Submodule this repo in a directory like `/vendor` and then include a line like this:
+
+`require_dir '../vendor/integration-test-support/support/**/*.rb'`
+
+in your `spec_helper.rb` file
 
 Example
 ========================
