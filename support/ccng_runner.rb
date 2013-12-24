@@ -9,7 +9,7 @@ class CcngRunner < ComponentRunner
       Bundler.with_clean_env do
         write_custom_cc_config_file
         prepare_cc_database
-        add_pid Process.spawn "bundle exec ./bin/cloud_controller --config #{custom_cc_config_location}", log_options(:cloud_controller)
+        add_pid Process.spawn "bundle exec ./bin/cloud_controller -s --config #{custom_cc_config_location}", log_options(:cloud_controller)
       end
     end
     wait_for_http_ready("CCNG", 8181)
@@ -59,8 +59,6 @@ class CcngRunner < ComponentRunner
     mysql "CREATE DATABASE #{cc_database_name}"
     db_migrate_log_options = log_options(:cc_db_migrate)
     sh "CLOUD_CONTROLLER_NG_CONFIG=#{custom_cc_config_location} bundle exec rake db:migrate >> #{db_migrate_log_options[:out]} 2>> #{db_migrate_log_options[:err]}"
-    insert_quota_def_statement = 'INSERT INTO quota_definitions(guid, created_at, name, non_basic_services_allowed, total_services, memory_limit, total_routes) VALUES("test_quota", "2010-01-01", "free", 1, 100, 1024, 1000)'
-    mysql insert_quota_def_statement, cc_database_name
   end
 
   def tear_down_cc_database
